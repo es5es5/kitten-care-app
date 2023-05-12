@@ -17,7 +17,7 @@
 </template>
 
 <script>
-import Ken from '@/components/sprite/ken/ken.vue';
+import Ken from '@/components/sprite/ken/Ken.vue';
 
 export default {
   name: "App",
