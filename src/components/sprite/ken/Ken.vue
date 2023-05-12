@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import { Sprite } from '@/assets/mixins.js'
+import Sprite from '@/components/sprite'
 
 export default {
   name: 'Ken',

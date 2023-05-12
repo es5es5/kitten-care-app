@@ -1,6 +1,6 @@
 import Velocity from 'velocity-animate'
 
-export const Sprite = {
+const Sprite = {
   data() {
     return {
       spriteElement: null,
@@ -131,3 +131,5 @@ export const Sprite = {
     },
   },
 }
+
+export default Sprite
