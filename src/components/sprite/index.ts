@@ -1,7 +1,29 @@
 import Velocity from 'velocity-animate'
 
-const Sprite = {
-  data() {
+interface SpriteCss {
+  sx: number
+  ex: number
+  sy: number
+  ey: number
+  duration: number
+  easing: number
+  loop: boolean
+  queue: string
+}
+
+interface CurrentScene {
+  x: number
+  y: number
+}
+
+export default {
+  data(): {
+    spriteElement: HTMLElement | null
+    spriteStyle: CSSStyleDeclaration | null
+    spriteCss: SpriteCss
+    currentScene: CurrentScene
+    save: boolean
+  } {
     return {
       spriteElement: null,
       spriteStyle: null,
@@ -26,22 +48,22 @@ const Sprite = {
     this.spriteInit(this.$el)
   },
   computed: {
-    spriteWidth() {
-      return this.spriteStyle.width.slice(0, -2)
+    spriteWidth(): number {
+      return parseInt(this.spriteStyle!.width.slice(0, -2))
     },
-    spriteHeight() {
-      return this.spriteStyle.height.slice(0, -2)
+    spriteHeight(): number {
+      return parseInt(this.spriteStyle!.height.slice(0, -2))
     },
   },
   methods: {
-    spriteInit(el) {
+    spriteInit(el: HTMLElement): void {
       // Init, config
       this.spriteElement = el
-      this.spriteStyle = window.getComputedStyle(this.spriteElement, null)
+      this.spriteStyle = window.getComputedStyle(this.spriteElement)
     },
-    spritePlay(cb) {
+    spritePlay(cb?: Function): void {
       Velocity(
-        this.spriteElement,
+        this.spriteElement!,
         {
           backgroundPositionX: [this.spriteCss.ex, this.spriteCss.sx],
           backgroundPositionY: [this.spriteCss.ey, this.spriteCss.sy],
@@ -62,13 +84,13 @@ const Sprite = {
         },
       )
     },
-    spritePause(cb) {
+    spritePause(cb?: Function): void {
       if (this.save) {
         this.updateScene()
       }
-      Velocity(this.spriteElement, 'stop')
+      Velocity(this.spriteElement!, 'stop')
     },
-    spriteRestart(cb) {
+    spriteRestart(cb?: Function): void {
       // easing and duration depend on coordinates, so they need synchronization.
       let originEasing = Math.abs(this.spriteCss.ex / this.spriteWidth)
       this.spriteCss.easing = Math.abs(
@@ -80,22 +102,25 @@ const Sprite = {
       if (this.spriteCss.loop) {
         this.spriteCss.loop = false
         this.spritePlay(() => {
-          cb()
+          if (cb) {
+            cb()
+          }
         })
       } else {
         this.spritePlay()
       }
     },
-    updateScene() {
-      const bp = this.spriteElement.style.backgroundPosition.trim().split(/\s+/)
+    updateScene(): void {
+      const bp =
+        this.spriteElement!.style.backgroundPosition.trim().split(/\s+/)
       const pos = {
         left: bp[0].slice(0, -2),
         top: bp[1].slice(0, -2),
       }
-      this.spriteCss.sx = pos.left
-      this.spriteCss.sy = pos.top
+      this.spriteCss.sx = parseInt(pos.left)
+      this.spriteCss.sy = parseInt(pos.top)
     },
-    moveToX(sx, ex) {
+    moveToX(sx: number, ex: number): void {
       // start point change
       if (!isNaN(sx)) {
         this.spriteCss.sx = sx
@@ -104,7 +129,7 @@ const Sprite = {
         this.spriteCss.ex = ex
       }
     },
-    moveToY(sy, ey) {
+    moveToY(sy: number, ey: number): void {
       if (sy) {
         this.spriteCss.sy = sy
       }
@@ -112,10 +137,15 @@ const Sprite = {
         this.spriteCss.ey = ey
       }
     },
-    setLoop(v = true) {
+    setLoop(v = true): void {
       this.spriteCss.loop = v
     },
-    playTo(frame, duration, initFnc, callbackFnc) {
+    playTo(
+      frame: number,
+      duration: number,
+      initFnc?: () => void,
+      callbackFnc?: () => void,
+    ): void {
       // 1 dimension
       this.spriteCss.ex = -this.spriteWidth * frame
       this.spriteCss.easing = Math.abs(
@@ -123,7 +153,7 @@ const Sprite = {
       )
       this.spriteCss.duration = duration
 
-      if (typeof init === 'function') {
+      if (typeof initFnc === 'function') {
         initFnc()
       }
 
@@ -131,5 +161,3 @@ const Sprite = {
     },
   },
 }
-
-export default Sprite

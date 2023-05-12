@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import Sprite from '@/components/sprite'
+import Sprite from '@/components/sprite/index.ts'
 
 export default {
   name: 'Ken',
