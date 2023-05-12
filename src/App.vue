@@ -3,13 +3,16 @@
 <template>
   <div>야옹-❤️</div>
   <div class="cat idle"></div>
+
+  <button type="button" @click="">IDLE</button>
+  <button type="button" @click="">WALK</button>
 </template>
 
 <style lang="scss" scoped>
 .cat {
   width: 32px;
   height: 32px;
-  background: url('@/assets/sprites/cat1.png');
+  background: url('@/assets/sprites/cat.png');
   background-repeat: no-repeat;
 
   &.idle {

@@ -1,3 +1,9 @@
+enum CatState {
+  idle = 'IDLE',
+  walk = 'WALK',
+  running = 'RUNNING',
+}
+
 class Cat extends Movable {
   private static readonly DEFAULT_SPEED = 1
   private static readonly MAX_HUNGER = 100
@@ -7,6 +13,7 @@ class Cat extends Movable {
   private happiness: number = 100
   private fatigue: number = 0
   private health: number = 100
+  private state: string = CatState.idle
 
   constructor(x: number, y: number) {
     super(x, y, Cat.DEFAULT_SPEED)
@@ -35,6 +42,14 @@ class Cat extends Movable {
     this.happiness += 10
   }
 
+  public getState(): string {
+    return this.state
+  }
+
+  public setState(state: CatState) {
+    this.state = state
+  }
+
   public getHunger() {
     return this.hunger
   }
@@ -50,3 +65,5 @@ class Cat extends Movable {
     return this.health
   }
 }
+
+export default Cat
