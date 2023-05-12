@@ -1,70 +1,41 @@
+<script setup lang="ts"></script>
+
 <template>
-  <div id="app">
-    <h2>basic</h2>
-    <Ken ref="ken1" :cssStyle="customStyle" />
-    <button @click="play()">Play</button>
-    <button @click="pause()">Pause</button>
-
-    <h2>sprite-change</h2>
-    <Ken ref="ken2" :cssStyle="customStyle" />
-    <button @click="kick()">Kick</button>
-
-    <h2>sprite+translate</h2>
-    <Ken ref="ken3" :cssStyle="customStyle" />
-    <button @click="leftMove">◀</button>
-    <button @click="rightMove">►</button>
-  </div>
+  <div>야옹-❤️</div>
+  <div class="cat idle"></div>
 </template>
 
-<script>
-import Ken from '@/components/sprite/ken/Ken.vue'
+<style lang="scss" scoped>
+.cat {
+  width: 32px;
+  height: 32px;
+  background: url('@/assets/sprites/cat1.png');
+  background-repeat: no-repeat;
 
-export default {
-  name: 'App',
-  components: {
-    Ken,
-  },
-  data() {
-    return {
-      customStyle: {
-        width: '70px',
-        height: '80px',
-        backgroundImage:
-          'url(https://uploads.codesandbox.io/uploads/user/50ba5672-ab19-466c-a1a4-38e62b5eb553/S5rk-ken.png)',
-      },
-    }
-  },
-  methods: {
-    play() {
-      this.$refs.ken1.spriteRestart(() => {
-        this.$refs.ken1.basicGesture()
-      })
-    },
-    pause() {
-      this.$refs.ken1.spritePause()
-    },
-    kick() {
-      this.$refs.ken2.kickGesture()
-    },
-    leftMove() {
-      this.$refs.ken3.leftMove()
-    },
-    rightMove() {
-      this.$refs.ken3.rightMove()
-    },
-  },
-}
-</script>
+  &.idle {
+    animation: idle 1s infinite steps(5);
+  }
 
-<style>
-#app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
+  &.walk {
+    animation: walk 1s infinite steps(5);
+  }
 }
-h2 {
-  text-align: left;
+
+@keyframes idle {
+  from {
+    background-position: 0 0;
+  }
+  to {
+    background-position: -160px 0;
+  }
+}
+
+@keyframes walk {
+  from {
+    background-position: 0 -33px;
+  }
+  to {
+    background-position: -160px -33px;
+  }
 }
 </style>

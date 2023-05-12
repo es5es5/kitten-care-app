@@ -25,8 +25,8 @@ class Cat extends Movable {
 
   public play(): void {
     this.happiness += 10
-    if (this.happiness > Tamagotchi.MAX_HAPPINESS) {
-      this.happiness = Tamagotchi.MAX_HAPPINESS
+    if (this.happiness > Cat.MAX_HAPPINESS) {
+      this.happiness = Cat.MAX_HAPPINESS
     }
   }
 
