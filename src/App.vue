@@ -1,11 +1,21 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import { reactive } from 'vue'
+
+const data = reactive({
+  state: 'idle',
+})
+</script>
 
 <template>
   <div>야옹-❤️</div>
-  <div class="cat idle"></div>
 
-  <button type="button" @click="">IDLE</button>
-  <button type="button" @click="">WALK</button>
+  <div class="wrap">
+    <div class="cat" :class="data.state"></div>
+  </div>
+
+  <hr />
+  <button type="button" @click="data.state = 'idle'">Idle</button>
+  <button type="button" @click="data.state = 'walk'">Walk</button>
 </template>
 
 <style lang="scss" scoped>
