@@ -33,6 +33,7 @@ let canvas: HTMLCanvasElement
 let ctx: CanvasRenderingContext2D
 let cat = null
 let catFrame = 5
+let catSpeed = 5
 
 onMounted(() => {
   canvas = document.getElementById('canvas') as HTMLCanvasElement
@@ -42,19 +43,17 @@ onMounted(() => {
   cat.width = 32
   cat.height = 32
 
-  draw(cat, catFrame)
+  draw(cat, catFrame, catSpeed)
 })
 
-const draw = (sprite: HTMLImageElement, spriteFrame: number) => {
-  // 현재 프레임 그리기
-  console.log('CANVAS_FRAME', CANVAS_FRAME)
+const draw = (sprite: HTMLImageElement, spriteFrame: number, speed: number) => {
   drawSpriteFrame(
     ctx,
     sprite,
     CANVAS_FRAME,
     0,
     0,
-    0,
+    368,
     sprite.width,
     sprite.height,
   )
@@ -65,8 +64,8 @@ const draw = (sprite: HTMLImageElement, spriteFrame: number) => {
   // 1초마다 다음 프레임 그리기
   setTimeout(() => {
     ctx.clearRect(0, 0, canvas.width, canvas.height)
-    requestAnimationFrame(() => draw(sprite, spriteFrame))
-  }, 200)
+    requestAnimationFrame(() => draw(sprite, spriteFrame, speed))
+  }, 1000 / speed)
 }
 </script>
 
