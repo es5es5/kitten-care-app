@@ -1,4 +1,4 @@
-enum CatState {
+export enum CatState {
   idle = 'IDLE',
   walk = 'WALK',
   running = 'RUNNING',
@@ -9,11 +9,11 @@ class Cat extends Movable {
   private static readonly MAX_HUNGER = 100
   private static readonly MAX_HAPPINESS = 100
 
+  private state: string = CatState.idle
   private hunger: number = 0
   private happiness: number = 100
   private fatigue: number = 0
   private health: number = 100
-  private state: string = CatState.idle
 
   constructor(x: number, y: number) {
     super(x, y, Cat.DEFAULT_SPEED)
