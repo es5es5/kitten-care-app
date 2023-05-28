@@ -1,28 +1,33 @@
 <script lang="ts" setup>
 import {
-  animationStates,
+  animationStates as CatAnimationStates,
   catSpriteAnimations,
-  spriteSettings,
+  spriteSettings as CatSpriteSettings,
 } from '@/assets/cat/states'
-import { onMounted } from 'vue'
+import { onMounted, reactive } from 'vue'
+import { Layer } from '@/assets/game/Layer.ts'
+
+const cat = reactive({
+  sprite: {
+    width: 0,
+    height: 0,
+  },
+  init: {
+    state: 'idle',
+    x: 0,
+    y: 0,
+  },
+  current: {
+    state: 'idle',
+    x: 0,
+    y: 0,
+  },
+})
+
 onMounted(() => {
   const canvas = document.getElementById('canvas1') as HTMLCanvasElement
-  const selectElement = document.getElementById(
-    'animations',
-  ) as HTMLSelectElement
-  animationStates.forEach((states) => {
-    let opt = document.createElement('option')
-    opt.value = states.name
-    opt.innerHTML = states.name
-    selectElement.appendChild(opt)
-  })
 
-  selectElement.addEventListener('change', (event: Event): void => {
-    const element = event.target as HTMLSelectElement
-    currentState = element.value
-  })
-
-  const ctx = canvas.getContext('2d')
+  const ctx = canvas.getContext('2d') as CanvasRenderingContext2D
   const CANVAS_WIDTH = (canvas.width = 360)
   const CANVAS_HEIGHT = (canvas.height = 370)
 
@@ -33,25 +38,38 @@ onMounted(() => {
   const FRAME_WIDTH = (frameImage.width = CANVAS_WIDTH)
   const FRAME_HEIGHT = (frameImage.height = CANVAS_HEIGHT)
 
+  const Frame = new Layer(
+    ctx,
+    new URL('@/assets/map/frame.png', import.meta.url).href,
+    FRAME_WIDTH,
+    FRAME_HEIGHT,
+  )
+
   const backgroundImage = new Image()
   backgroundImage.src = new URL(
     '@/assets/map/background.png',
     import.meta.url,
   ).href
-  const BACKGROUND_WIDTH = (backgroundImage.width = 360)
-  const BACKGROUND_HEIGHT = (backgroundImage.height = 360)
+  const BACKGROUND_WIDTH = FRAME_WIDTH - FRAME_PADDING * 2
+  const BACKGROUND_HEIGHT = FRAME_HEIGHT - TITLE_BAR_HEIGHT - FRAME_PADDING
 
   const catImage = new Image()
   catImage.src = new URL('@/assets/cat/cat.png', import.meta.url).href
 
-  const spriteWidth = spriteSettings.spriteWidth
-  const spriteHeight = spriteSettings.spriteHeight
-  let currentState = spriteSettings.initialState
+  const spriteWidth = CatSpriteSettings.spriteWidth
+  const spriteHeight = CatSpriteSettings.spriteHeight
+
+  cat.init.x = CANVAS_WIDTH / 2 - spriteWidth / 2
+  cat.init.y =
+    CANVAS_HEIGHT - spriteHeight - TITLE_BAR_HEIGHT + FRAME_PADDING * 2
+  cat.init.state = CatSpriteSettings.initialState
+  cat.current.x = cat.init.x
+  cat.current.y = cat.init.y
+  cat.current.state = cat.init.state
 
   let gameFrame = 0
-  const staggerFrames = 10
 
-  animationStates.forEach((state, index) => {
+  CatAnimationStates.forEach((state, index) => {
     let frames = {
       loc: [] as Array<{ x: number; y: number }>,
     }
@@ -64,25 +82,25 @@ onMounted(() => {
     catSpriteAnimations[state.name].speed = state.speed
   })
 
-  let x = 0
   function animate() {
     // ctx?.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT)
-    let position =
-      Math.floor(gameFrame / catSpriteAnimations[currentState].speed) %
-      catSpriteAnimations[currentState].loc.length
-    let frameX = spriteWidth * position
-    let frameY = catSpriteAnimations[currentState].loc[position].y
+    let framePosition =
+      Math.floor(gameFrame / catSpriteAnimations[cat.current.state].speed) %
+      catSpriteAnimations[cat.current.state].loc.length
+    let frameX = spriteWidth * framePosition
+    let frameY = catSpriteAnimations[cat.current.state].loc[framePosition].y
 
     // Drawing Frame
-    ctx?.drawImage(frameImage, 0, 0, FRAME_WIDTH, FRAME_HEIGHT)
+    // ctx?.drawImage(frameImage, 0, 0, FRAME_WIDTH, FRAME_HEIGHT)
+    Frame.drawLayer()
 
     // Drawing Background
     ctx?.drawImage(
       backgroundImage,
       FRAME_PADDING,
       TITLE_BAR_HEIGHT,
-      FRAME_WIDTH - FRAME_PADDING * 2,
-      FRAME_HEIGHT - TITLE_BAR_HEIGHT - FRAME_PADDING,
+      BACKGROUND_WIDTH,
+      BACKGROUND_HEIGHT,
     )
 
     // Drawing Cat
@@ -94,8 +112,8 @@ onMounted(() => {
       spriteWidth, // Sprite Frame X End
       spriteHeight, // Sprite Frame Y End
 
-      CANVAS_WIDTH / 2 - spriteWidth / 2, // Drawing Position X Start
-      CANVAS_HEIGHT - spriteHeight - TITLE_BAR_HEIGHT + FRAME_PADDING * 2, // Drawing Position Y Start
+      cat.current.x, // Drawing Position X Start
+      cat.current.y, // Drawing Position Y Start
       spriteWidth, // Drawing Position X End
       spriteHeight, // Drawing Position Y End
     )
@@ -113,7 +131,11 @@ onMounted(() => {
     <canvas id="canvas1"></canvas>
     <div class="controls">
       <label for="animations">Choose Animation:</label>
-      <select name="animations" id="animations"></select>
+      <select name="animations" id="animations" v-model="cat.current.state">
+        <option v-for="item in CatAnimationStates" :value="item.name">
+          {{ item.name }}
+        </option>
+      </select>
     </div>
   </div>
 </template>
