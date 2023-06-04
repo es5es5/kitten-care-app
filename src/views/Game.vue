@@ -53,6 +53,11 @@ onMounted(() => {
   const BACKGROUND_WIDTH = FRAME_WIDTH - FRAME_PADDING * 2
   const BACKGROUND_HEIGHT = FRAME_HEIGHT - TITLE_BAR_HEIGHT - FRAME_PADDING
 
+  const menusImage = new Image()
+  menusImage.src = new URL('@/assets/map/menus.png', import.meta.url).href
+  const MENUS_WIDTH = 55
+  const MENUS_HEIGHT = 55
+
   const catImage = new Image()
   catImage.src = new URL('@/assets/cat/cat.png', import.meta.url).href
 
@@ -101,6 +106,70 @@ onMounted(() => {
       TITLE_BAR_HEIGHT,
       BACKGROUND_WIDTH,
       BACKGROUND_HEIGHT,
+    )
+
+    // Drawing Menus 1
+    ctx?.drawImage(
+      menusImage,
+      MENUS_WIDTH * 0,
+      MENUS_HEIGHT * 0,
+      MENUS_WIDTH,
+      MENUS_HEIGHT,
+      FRAME_PADDING + FRAME_PADDING + MENUS_WIDTH * 0,
+      TITLE_BAR_HEIGHT,
+      MENUS_WIDTH,
+      MENUS_HEIGHT,
+    )
+
+    // Drawing Menus 2
+    ctx?.drawImage(
+      menusImage,
+      MENUS_WIDTH * 0,
+      MENUS_HEIGHT * 1,
+      MENUS_WIDTH,
+      MENUS_HEIGHT,
+      FRAME_PADDING + FRAME_PADDING + MENUS_WIDTH * 1,
+      TITLE_BAR_HEIGHT,
+      MENUS_WIDTH,
+      MENUS_HEIGHT,
+    )
+
+    // Drawing Menus 3
+    ctx?.drawImage(
+      menusImage,
+      MENUS_WIDTH * 0,
+      MENUS_HEIGHT * 2,
+      MENUS_WIDTH,
+      MENUS_HEIGHT,
+      FRAME_PADDING + FRAME_PADDING + MENUS_WIDTH * 2,
+      TITLE_BAR_HEIGHT,
+      MENUS_WIDTH,
+      MENUS_HEIGHT,
+    )
+    // Drawing Menus 4
+    ctx?.drawImage(
+      menusImage,
+      MENUS_WIDTH * 0,
+      MENUS_HEIGHT * 3,
+      MENUS_WIDTH,
+      MENUS_HEIGHT,
+      FRAME_PADDING + FRAME_PADDING + MENUS_WIDTH * 3,
+      TITLE_BAR_HEIGHT,
+      MENUS_WIDTH,
+      MENUS_HEIGHT,
+    )
+
+    // Drawing Menus 5
+    ctx?.drawImage(
+      menusImage,
+      MENUS_WIDTH * 0,
+      MENUS_HEIGHT * 4,
+      MENUS_WIDTH,
+      MENUS_HEIGHT,
+      FRAME_PADDING + FRAME_PADDING + MENUS_WIDTH * 4,
+      TITLE_BAR_HEIGHT,
+      MENUS_WIDTH,
+      MENUS_HEIGHT,
     )
 
     // Drawing Cat

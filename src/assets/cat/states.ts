@@ -15,8 +15,18 @@ export const animationStates = [
     speed: 10,
   },
   {
+    name: 'idle_agro',
+    frames: 3,
+    speed: 10,
+  },
+  {
     name: 'walk',
     frames: 6,
+    speed: 10,
+  },
+  {
+    name: 'walk_agro',
+    frames: 3,
     speed: 10,
   },
   {
@@ -25,7 +35,7 @@ export const animationStates = [
     speed: 10,
   },
   {
-    name: 'wakeUp',
+    name: 'sleep_agro',
     frames: 3,
     speed: 10,
   },
@@ -42,6 +52,31 @@ export const animationStates = [
   {
     name: 'standing_walk',
     frames: 8,
+    speed: 10,
+  },
+  {
+    name: 'eat',
+    frames: 8,
+    speed: 10,
+  },
+  {
+    name: 'wait1',
+    frames: 4,
+    speed: 10,
+  },
+  {
+    name: 'wait2',
+    frames: 1,
+    speed: 10,
+  },
+  {
+    name: 'wait3',
+    frames: 1,
+    speed: 10,
+  },
+  {
+    name: 'dash',
+    frames: 3,
     speed: 10,
   },
 ] as Array<SpriteStateListItem>
