@@ -79,29 +79,30 @@ export class Menus {
     this.isStatic = true
   }
 
-  setActive(x: number, y: number): boolean {
-    if (this.isStatic) return false
+  setActive(e: PointerEvent) {
+    const Element = e.target as HTMLCanvasElement
+    if (this.isStatic) return
+    if (this.isHeld) return
 
     if (
-      x > this.startX &&
-      x < this.startX + MenusSettings.width &&
-      y > this.startY &&
-      y < this.startY + MenusSettings.height
+      e.offsetX > this.startX &&
+      e.offsetX < this.startX + MenusSettings.width &&
+      e.offsetY > this.startY &&
+      e.offsetY < this.startY + MenusSettings.height
     ) {
       this.isActive = true
+      Element.style.cursor = 'pointer'
     } else {
       this.isActive = false
+      Element.style.cursor = 'default'
+      e.preventDefault
+      return
     }
-    return this.isActive
   }
 
-  setDragged(x: number, y: number, state: boolean) {
+  setDragging(x: number, y: number) {
     if (this.isStatic) return
 
-    if (!state) {
-      this.isHeld = false
-      this.isActive = false
-    }
     if (
       x > getMenusStartX(this.index) &&
       x < getMenusStartX(this.index) + MenusSettings.width &&
@@ -111,5 +112,10 @@ export class Menus {
       this.isHeld = true
       this.isActive = true
     }
+  }
+
+  setDragged(x: number, y: number) {
+    this.startX = x
+    this.startY = y
   }
 }

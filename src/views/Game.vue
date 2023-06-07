@@ -26,45 +26,33 @@ const cat = reactive({
   },
 })
 
-// const menus = reactive({
-//   menu1: false,
-//   menu2: false,
-//   menu3: false,
-//   menu4: false,
-//   menu5: false,
-// })
-
 onMounted(() => {
   const canvas = document.getElementById('canvas1') as HTMLCanvasElement
   canvas.width = FrameSettings.width
   canvas.height = FrameSettings.height
 
-  canvas.addEventListener('pointermove', ({ offsetX, offsetY }) => {
-    menu1.setActive(offsetX, offsetY)
-    if (menu1.isHeld) {
-      menu1.startX = offsetX
-      menu1.startY = offsetY
-    }
-    menu2.setActive(offsetX, offsetY)
-    menu3.setActive(offsetX, offsetY)
-    menu4.setActive(offsetX, offsetY)
-    menu5.setActive(offsetX, offsetY)
+  canvas.addEventListener('pointermove', (e) => {
+    menu1.setActive(e)
+    menu2.setActive(e)
+    menu3.setActive(e)
+    menu4.setActive(e)
+    menu5.setActive(e)
   })
 
   canvas.addEventListener('pointerdown', ({ offsetX, offsetY }) => {
-    menu1.setDragged(offsetX, offsetY, true)
-    menu2.setDragged(offsetX, offsetY, true)
-    menu3.setDragged(offsetX, offsetY, true)
-    menu4.setDragged(offsetX, offsetY, true)
-    menu5.setDragged(offsetX, offsetY, true)
+    // menu1.setDragging(offsetX, offsetY)
+    // menu2.setDragging(offsetX, offsetY)
+    // menu3.setDragging(offsetX, offsetY)
+    // menu4.setDragging(offsetX, offsetY)
+    // menu5.setDragging(offsetX, offsetY)
   })
 
   canvas.addEventListener('pointerup', ({ offsetX, offsetY }) => {
-    menu1.setDragged(offsetX, offsetY, false)
-    menu2.setDragged(offsetX, offsetY, false)
-    menu3.setDragged(offsetX, offsetY, false)
-    menu4.setDragged(offsetX, offsetY, false)
-    menu5.setDragged(offsetX, offsetY, false)
+    // menu1.setDragged(offsetX, offsetY)
+    // menu2.setDragged(offsetX, offsetY)
+    // menu3.setDragged(offsetX, offsetY)
+    // menu4.setDragged(offsetX, offsetY)
+    // menu5.setDragged(offsetX, offsetY)
   })
 
   const ctx = canvas.getContext('2d') as CanvasRenderingContext2D
