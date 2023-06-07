@@ -1,8 +1,8 @@
 export const FrameSettings = {
   padding: 4,
-  titleBarHeight: 37,
-  width: 360,
-  height: 370,
+  titleBarHeight: 36,
+  width: 328,
+  height: 360,
 }
 
 export class Frame {

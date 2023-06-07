@@ -28,8 +28,8 @@ const cat = reactive({
 
 onMounted(() => {
   const canvas = document.getElementById('canvas1') as HTMLCanvasElement
-  canvas.width = 360
-  canvas.height = 370
+  canvas.width = FrameSettings.width
+  canvas.height = FrameSettings.height
 
   const ctx = canvas.getContext('2d') as CanvasRenderingContext2D
 

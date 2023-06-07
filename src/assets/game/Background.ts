@@ -1,6 +1,9 @@
 import { FrameSettings } from './Frame'
 
-export const BackgroundSettings = {}
+export const BackgroundSettings = {
+  width: 320,
+  height: 320,
+}
 
 export class Background {
   ctx: CanvasRenderingContext2D
@@ -17,10 +20,12 @@ export class Background {
       this.image,
       FrameSettings.padding,
       FrameSettings.titleBarHeight,
-      FrameSettings.width - FrameSettings.padding * 2,
-      FrameSettings.height -
-        FrameSettings.titleBarHeight -
-        FrameSettings.padding,
+      // FrameSettings.width - FrameSettings.padding * 2,
+      BackgroundSettings.width,
+      // FrameSettings.height -
+      //   FrameSettings.titleBarHeight -
+      //   FrameSettings.padding,
+      BackgroundSettings.height,
     )
   }
 }

@@ -3,19 +3,20 @@ import { FrameSettings } from './Frame'
 export const MenusSettings = {
   width: 56,
   height: 56,
-  padding: 8,
+  paddingHorizontal: 4,
+  paddingVertical: 8,
 }
 
 function getMenusStartX(index: number) {
-  return (
+  let result =
     FrameSettings.padding +
-    MenusSettings.padding +
-    (MenusSettings.width + MenusSettings.padding) * (index - 1)
-  )
+    MenusSettings.paddingHorizontal +
+    (MenusSettings.width + MenusSettings.paddingHorizontal) * (index - 1)
+  return result + 10
 }
 
 function getMenusStartY() {
-  return FrameSettings.titleBarHeight + MenusSettings.padding
+  return FrameSettings.titleBarHeight + MenusSettings.paddingVertical
 }
 
 export class Menus {
