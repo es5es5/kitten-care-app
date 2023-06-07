@@ -1,4 +1,5 @@
 export const FrameSettings = {
+  imageSrc: new URL('@/assets/map/frame.png', import.meta.url).href,
   padding: 4,
   titleBarHeight: 36,
   width: 328,
@@ -11,10 +12,10 @@ export class Frame {
   width: number
   height: number
 
-  constructor(ctx: CanvasRenderingContext2D, imageSrc: string) {
+  constructor(ctx: CanvasRenderingContext2D) {
     this.ctx = ctx
     this.image = new Image()
-    this.image.src = imageSrc
+    this.image.src = FrameSettings.imageSrc
     this.width = FrameSettings.width
     this.height = FrameSettings.height
   }

@@ -1,6 +1,7 @@
 import { FrameSettings } from './Frame'
 
 export const MenusSettings = {
+  imageSrc: new URL('@/assets/map/menus.png', import.meta.url).href,
   width: 56,
   height: 56,
   paddingHorizontal: 4,
@@ -29,10 +30,10 @@ export class Menus {
   isHeld = false
   isStatic = false
 
-  constructor(ctx: CanvasRenderingContext2D, imageSrc: string, index: number) {
+  constructor(ctx: CanvasRenderingContext2D, index: number) {
     this.ctx = ctx
     this.image = new Image()
-    this.image.src = imageSrc
+    this.image.src = MenusSettings.imageSrc
     this.image.width = MenusSettings.width
     this.image.height = MenusSettings.height
     this.index = index

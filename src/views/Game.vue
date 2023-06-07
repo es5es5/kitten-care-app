@@ -69,41 +69,15 @@ onMounted(() => {
 
   const ctx = canvas.getContext('2d') as CanvasRenderingContext2D
 
-  const frame = new Frame(
-    ctx,
-    new URL('@/assets/map/frame.png', import.meta.url).href,
-  )
+  const frame = new Frame(ctx)
 
-  const background = new Background(
-    ctx,
-    new URL('@/assets/map/background.png', import.meta.url).href,
-  )
+  const background = new Background(ctx)
 
-  const menu1 = new Menus(
-    ctx,
-    new URL('@/assets/map/menus.png', import.meta.url).href,
-    1,
-  )
-  const menu2 = new Menus(
-    ctx,
-    new URL('@/assets/map/menus.png', import.meta.url).href,
-    2,
-  )
-  const menu3 = new Menus(
-    ctx,
-    new URL('@/assets/map/menus.png', import.meta.url).href,
-    3,
-  )
-  const menu4 = new Menus(
-    ctx,
-    new URL('@/assets/map/menus.png', import.meta.url).href,
-    4,
-  )
-  const menu5 = new Menus(
-    ctx,
-    new URL('@/assets/map/menus.png', import.meta.url).href,
-    5,
-  )
+  const menu1 = new Menus(ctx, 1)
+  const menu2 = new Menus(ctx, 2)
+  const menu3 = new Menus(ctx, 3)
+  const menu4 = new Menus(ctx, 4)
+  const menu5 = new Menus(ctx, 5)
 
   const catImage = new Image()
   catImage.src = new URL('@/assets/cat/cat.png', import.meta.url).href

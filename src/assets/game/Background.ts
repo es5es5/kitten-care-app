@@ -1,6 +1,7 @@
 import { FrameSettings } from './Frame'
 
 export const BackgroundSettings = {
+  imageSrc: new URL('@/assets/map/background.png', import.meta.url).href,
   width: 320,
   height: 320,
 }
@@ -9,10 +10,10 @@ export class Background {
   ctx: CanvasRenderingContext2D
   image: HTMLImageElement
 
-  constructor(ctx: CanvasRenderingContext2D, imageSrc: string) {
+  constructor(ctx: CanvasRenderingContext2D) {
     this.ctx = ctx
     this.image = new Image()
-    this.image.src = imageSrc
+    this.image.src = BackgroundSettings.imageSrc
   }
 
   draw() {
@@ -20,11 +21,7 @@ export class Background {
       this.image,
       FrameSettings.padding,
       FrameSettings.titleBarHeight,
-      // FrameSettings.width - FrameSettings.padding * 2,
       BackgroundSettings.width,
-      // FrameSettings.height -
-      //   FrameSettings.titleBarHeight -
-      //   FrameSettings.padding,
       BackgroundSettings.height,
     )
   }
