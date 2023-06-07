@@ -23,6 +23,11 @@ export class Menus {
   ctx: CanvasRenderingContext2D
   image: HTMLImageElement
   index: number // 메뉴 순서
+  startX: number
+  startY: number
+  isActive = false
+  isHeld = false
+  isStatic = false
 
   constructor(ctx: CanvasRenderingContext2D, imageSrc: string, index: number) {
     this.ctx = ctx
@@ -31,6 +36,8 @@ export class Menus {
     this.image.width = MenusSettings.width
     this.image.height = MenusSettings.height
     this.index = index
+    this.startX = getMenusStartX(this.index)
+    this.startY = getMenusStartY()
   }
 
   draw() {
@@ -40,7 +47,26 @@ export class Menus {
        * 0 None Active
        * 1 Active
        */
-      MenusSettings.width * 0,
+      this.isActive ? MenusSettings.width : 0,
+      MenusSettings.height * (this.index - 1),
+      MenusSettings.width,
+      MenusSettings.height,
+      this.startX,
+      this.startY,
+      MenusSettings.width,
+      MenusSettings.height,
+    )
+    this.isStatic = false
+  }
+
+  drawStatic() {
+    this.ctx.drawImage(
+      this.image,
+      /**
+       * 0 None Active
+       * 1 Active
+       */
+      0,
       MenusSettings.height * (this.index - 1),
       MenusSettings.width,
       MenusSettings.height,
@@ -49,5 +75,40 @@ export class Menus {
       MenusSettings.width,
       MenusSettings.height,
     )
+    this.isStatic = true
+  }
+
+  setActive(x: number, y: number): boolean {
+    if (this.isStatic) return false
+
+    if (
+      x > this.startX &&
+      x < this.startX + MenusSettings.width &&
+      y > this.startY &&
+      y < this.startY + MenusSettings.height
+    ) {
+      this.isActive = true
+    } else {
+      this.isActive = false
+    }
+    return this.isActive
+  }
+
+  setDragged(x: number, y: number, state: boolean) {
+    if (this.isStatic) return
+
+    if (!state) {
+      this.isHeld = false
+      this.isActive = false
+    }
+    if (
+      x > getMenusStartX(this.index) &&
+      x < getMenusStartX(this.index) + MenusSettings.width &&
+      y > getMenusStartY() &&
+      y < getMenusStartY() + MenusSettings.height
+    ) {
+      this.isHeld = true
+      this.isActive = true
+    }
   }
 }

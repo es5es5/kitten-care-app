@@ -26,10 +26,46 @@ const cat = reactive({
   },
 })
 
+// const menus = reactive({
+//   menu1: false,
+//   menu2: false,
+//   menu3: false,
+//   menu4: false,
+//   menu5: false,
+// })
+
 onMounted(() => {
   const canvas = document.getElementById('canvas1') as HTMLCanvasElement
   canvas.width = FrameSettings.width
   canvas.height = FrameSettings.height
+
+  canvas.addEventListener('pointermove', ({ offsetX, offsetY }) => {
+    menu1.setActive(offsetX, offsetY)
+    if (menu1.isHeld) {
+      menu1.startX = offsetX
+      menu1.startY = offsetY
+    }
+    menu2.setActive(offsetX, offsetY)
+    menu3.setActive(offsetX, offsetY)
+    menu4.setActive(offsetX, offsetY)
+    menu5.setActive(offsetX, offsetY)
+  })
+
+  canvas.addEventListener('pointerdown', ({ offsetX, offsetY }) => {
+    menu1.setDragged(offsetX, offsetY, true)
+    menu2.setDragged(offsetX, offsetY, true)
+    menu3.setDragged(offsetX, offsetY, true)
+    menu4.setDragged(offsetX, offsetY, true)
+    menu5.setDragged(offsetX, offsetY, true)
+  })
+
+  canvas.addEventListener('pointerup', ({ offsetX, offsetY }) => {
+    menu1.setDragged(offsetX, offsetY, false)
+    menu2.setDragged(offsetX, offsetY, false)
+    menu3.setDragged(offsetX, offsetY, false)
+    menu4.setDragged(offsetX, offsetY, false)
+    menu5.setDragged(offsetX, offsetY, false)
+  })
 
   const ctx = canvas.getContext('2d') as CanvasRenderingContext2D
 
@@ -41,6 +77,32 @@ onMounted(() => {
   const background = new Background(
     ctx,
     new URL('@/assets/map/background.png', import.meta.url).href,
+  )
+
+  const menu1 = new Menus(
+    ctx,
+    new URL('@/assets/map/menus.png', import.meta.url).href,
+    1,
+  )
+  const menu2 = new Menus(
+    ctx,
+    new URL('@/assets/map/menus.png', import.meta.url).href,
+    2,
+  )
+  const menu3 = new Menus(
+    ctx,
+    new URL('@/assets/map/menus.png', import.meta.url).href,
+    3,
+  )
+  const menu4 = new Menus(
+    ctx,
+    new URL('@/assets/map/menus.png', import.meta.url).href,
+    4,
+  )
+  const menu5 = new Menus(
+    ctx,
+    new URL('@/assets/map/menus.png', import.meta.url).href,
+    5,
   )
 
   const catImage = new Image()
@@ -90,35 +152,16 @@ onMounted(() => {
     background.draw()
 
     // Drawing Menus
-    new Menus(
-      ctx,
-      new URL('@/assets/map/menus.png', import.meta.url).href,
-      1,
-    ).draw()
-
-    new Menus(
-      ctx,
-      new URL('@/assets/map/menus.png', import.meta.url).href,
-      2,
-    ).draw()
-
-    new Menus(
-      ctx,
-      new URL('@/assets/map/menus.png', import.meta.url).href,
-      3,
-    ).draw()
-
-    new Menus(
-      ctx,
-      new URL('@/assets/map/menus.png', import.meta.url).href,
-      4,
-    ).draw()
-
-    new Menus(
-      ctx,
-      new URL('@/assets/map/menus.png', import.meta.url).href,
-      5,
-    ).draw()
+    menu1.drawStatic()
+    menu2.drawStatic()
+    menu3.drawStatic()
+    menu4.drawStatic()
+    menu5.drawStatic()
+    menu1.draw()
+    menu2.draw()
+    menu3.draw()
+    menu4.draw()
+    menu5.draw()
 
     // Drawing Cat
     ctx?.drawImage(
@@ -163,7 +206,5 @@ onMounted(() => {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 200px;
-  height: 200px;
 }
 </style>
