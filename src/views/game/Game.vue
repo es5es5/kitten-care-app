@@ -8,6 +8,9 @@ import { onMounted, reactive } from 'vue'
 import { Background } from '@/assets/game/Background'
 import { Menus } from '@/assets/game/Menus'
 import { Frame, FrameSettings } from '@/assets/game/Frame'
+import { useGameStore } from '@/store/game'
+
+let gameStore = useGameStore()
 
 const cat = reactive({
   sprite: {
@@ -27,45 +30,40 @@ const cat = reactive({
 })
 
 onMounted(() => {
-  const canvas = document.getElementById('canvas1') as HTMLCanvasElement
+  gameStore.setCanvas(document.getElementById('canvas1') as HTMLCanvasElement)
+  const canvas = gameStore.getCanvas!
+  const ctx = gameStore.getCtx!
+
   canvas.width = FrameSettings.width
   canvas.height = FrameSettings.height
 
   canvas.addEventListener('pointermove', (e) => {
-    menu1.setActive(e)
-    menu2.setActive(e)
-    menu3.setActive(e)
-    menu4.setActive(e)
-    menu5.setActive(e)
+    gameStore.getMenuList.forEach((menu) => {
+      menu.setActive(e)
+    })
+
+    if (gameStore.getMenuList.some((menu) => menu.isActive)) {
+      gameStore.setCursor('pointer')
+    } else {
+      gameStore.setCursor('default')
+    }
   })
 
-  canvas.addEventListener('pointerdown', ({ offsetX, offsetY }) => {
-    // menu1.setDragging(offsetX, offsetY)
-    // menu2.setDragging(offsetX, offsetY)
-    // menu3.setDragging(offsetX, offsetY)
-    // menu4.setDragging(offsetX, offsetY)
-    // menu5.setDragging(offsetX, offsetY)
+  canvas.addEventListener('pointerdown', (e) => {
+    console.log('pointerdown', e)
   })
 
-  canvas.addEventListener('pointerup', ({ offsetX, offsetY }) => {
-    // menu1.setDragged(offsetX, offsetY)
-    // menu2.setDragged(offsetX, offsetY)
-    // menu3.setDragged(offsetX, offsetY)
-    // menu4.setDragged(offsetX, offsetY)
-    // menu5.setDragged(offsetX, offsetY)
+  canvas.addEventListener('pointerup', (e) => {
+    console.log('pointerup', e)
   })
-
-  const ctx = canvas.getContext('2d') as CanvasRenderingContext2D
 
   const frame = new Frame(ctx)
 
   const background = new Background(ctx)
 
-  const menu1 = new Menus(ctx, 1)
-  const menu2 = new Menus(ctx, 2)
-  const menu3 = new Menus(ctx, 3)
-  const menu4 = new Menus(ctx, 4)
-  const menu5 = new Menus(ctx, 5)
+  for (let index = 1; index <= 5; index++) {
+    gameStore.addMenuList(new Menus(ctx, index))
+  }
 
   const catImage = new Image()
   catImage.src = new URL('@/assets/cat/cat.png', import.meta.url).href
@@ -114,16 +112,10 @@ onMounted(() => {
     background.draw()
 
     // Drawing Menus
-    menu1.drawStatic()
-    menu2.drawStatic()
-    menu3.drawStatic()
-    menu4.drawStatic()
-    menu5.drawStatic()
-    menu1.draw()
-    menu2.draw()
-    menu3.draw()
-    menu4.draw()
-    menu5.draw()
+    gameStore.getMenuList.forEach((menu) => {
+      menu.drawStatic()
+      menu.draw()
+    })
 
     // Drawing Cat
     ctx?.drawImage(

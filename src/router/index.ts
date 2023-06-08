@@ -6,17 +6,17 @@ const router = createRouter({
     {
       path: '/',
       name: 'Home',
-      component: () => import('@/views/Home.vue'),
-    },
-    {
-      path: '/opening',
-      name: 'Opening',
-      component: () => import('@/views/Opening.vue'),
-    },
-    {
-      path: '/game',
-      name: 'Game',
-      component: () => import('@/views/Game.vue'),
+      component: () => import('@/components/Layout.vue'),
+      redirect: () => {
+        return { name: 'Game' }
+      },
+      children: [
+        {
+          path: 'game',
+          name: 'Game',
+          component: () => import('@/views/game/Game.vue'),
+        },
+      ],
     },
   ],
 })

@@ -39,6 +39,8 @@ export class Menus {
     this.index = index
     this.startX = getMenusStartX(this.index)
     this.startY = getMenusStartY()
+
+    return this
   }
 
   draw() {
@@ -80,7 +82,6 @@ export class Menus {
   }
 
   setActive(e: PointerEvent) {
-    const Element = e.target as HTMLCanvasElement
     if (this.isStatic) return
     if (this.isHeld) return
 
@@ -91,10 +92,8 @@ export class Menus {
       e.offsetY < this.startY + MenusSettings.height
     ) {
       this.isActive = true
-      Element.style.cursor = 'pointer'
     } else {
       this.isActive = false
-      Element.style.cursor = 'default'
       e.preventDefault
       return
     }
