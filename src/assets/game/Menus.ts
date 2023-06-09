@@ -1,7 +1,4 @@
 import { FrameSettings } from './Frame'
-import { useGameStore } from '@/store/game'
-
-const gameStore = useGameStore()
 
 export const MenusSettings = {
   imageSrc: new URL('@/assets/map/menus.png', import.meta.url).href,
@@ -23,13 +20,19 @@ function getMenusStartY() {
   return FrameSettings.titleBarHeight + MenusSettings.paddingVertical
 }
 
+export enum MenuShowingState {
+  Disabled = 0,
+  Active = 1,
+  Default = 2,
+}
+
 export class Menus {
   ctx: CanvasRenderingContext2D
   image: HTMLImageElement
   index: number // 메뉴 순서
   startX: number
   startY: number
-  isActive = false
+  showingState: MenuShowingState
   isHeld = false
   isStatic = false
   isFalling = false
@@ -43,18 +46,32 @@ export class Menus {
     this.index = index
     this.startX = getMenusStartX(this.index)
     this.startY = getMenusStartY()
+    this.showingState = MenuShowingState.Default
 
     return this
   }
 
   draw() {
+    let _showingState = 0
+    switch (this.showingState) {
+      case MenuShowingState.Disabled:
+        _showingState = MenusSettings.width * 0
+        break
+      case MenuShowingState.Active:
+        _showingState = MenusSettings.width * 1
+        break
+      case MenuShowingState.Default:
+        _showingState = MenusSettings.width * 0
+        break
+    }
     this.ctx.drawImage(
       this.image,
       /**
-       * 0 None Active
-       * 1 Active
+       * Disabled = 0
+       * Active = 1
+       * Default = 2
        */
-      this.isActive ? MenusSettings.width : 0,
+      _showingState,
       MenusSettings.height * (this.index - 1),
       MenusSettings.width,
       MenusSettings.height,
@@ -103,9 +120,9 @@ export class Menus {
       e.offsetY > this.startY &&
       e.offsetY < this.startY + MenusSettings.height
     ) {
-      this.isActive = true
+      this.showingState = MenuShowingState.Active
     } else {
-      this.isActive = false
+      this.showingState = MenuShowingState.Default
       return
     }
   }

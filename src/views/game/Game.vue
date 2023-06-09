@@ -6,7 +6,7 @@ import {
 } from '@/assets/cat/states'
 import { onMounted, reactive } from 'vue'
 import { Background } from '@/assets/game/Background'
-import { Menus } from '@/assets/game/Menus'
+import { Menus, MenuShowingState } from '@/assets/game/Menus'
 import { Frame, FrameSettings } from '@/assets/game/Frame'
 import { useGameStore } from '@/store/game'
 
@@ -43,7 +43,11 @@ onMounted(() => {
       menu.setDragged(e)
     })
 
-    if (gameStore.getMenuList.some((menu) => menu.isActive)) {
+    if (
+      gameStore.getMenuList.some(
+        (menu) => menu.showingState === MenuShowingState.Active,
+      )
+    ) {
       gameStore.setCursor('grab')
       if (gameStore.getMenuList.some((menu) => menu.isHeld)) {
         gameStore.setCursor('grabbing')
