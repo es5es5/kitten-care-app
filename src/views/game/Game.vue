@@ -10,7 +10,7 @@ import { Menus } from '@/assets/game/Menus'
 import { Frame, FrameSettings } from '@/assets/game/Frame'
 import { useGameStore } from '@/store/game'
 
-let gameStore = useGameStore()
+const gameStore = useGameStore()
 
 const cat = reactive({
   sprite: {
@@ -40,21 +40,30 @@ onMounted(() => {
   canvas.addEventListener('pointermove', (e) => {
     gameStore.getMenuList.forEach((menu) => {
       menu.setActive(e)
+      menu.setDragged(e)
     })
 
     if (gameStore.getMenuList.some((menu) => menu.isActive)) {
-      gameStore.setCursor('pointer')
+      gameStore.setCursor('grab')
+      if (gameStore.getMenuList.some((menu) => menu.isHeld)) {
+        gameStore.setCursor('grabbing')
+      }
     } else {
       gameStore.setCursor('default')
     }
   })
 
   canvas.addEventListener('pointerdown', (e) => {
+    gameStore.getMenuList.forEach((menu) => {
+      menu.setDragging(e)
+    })
     console.log('pointerdown', e)
   })
 
   canvas.addEventListener('pointerup', (e) => {
-    console.log('pointerup', e)
+    gameStore.getMenuList.forEach((menu) => {
+      menu.setDropped(e)
+    })
   })
 
   const frame = new Frame(ctx)

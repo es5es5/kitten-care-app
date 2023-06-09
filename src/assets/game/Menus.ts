@@ -1,4 +1,7 @@
 import { FrameSettings } from './Frame'
+import { useGameStore } from '@/store/game'
+
+const gameStore = useGameStore()
 
 export const MenusSettings = {
   imageSrc: new URL('@/assets/map/menus.png', import.meta.url).href,
@@ -94,27 +97,32 @@ export class Menus {
       this.isActive = true
     } else {
       this.isActive = false
-      e.preventDefault
       return
     }
   }
 
-  setDragging(x: number, y: number) {
+  setDragging(e: PointerEvent) {
     if (this.isStatic) return
 
     if (
-      x > getMenusStartX(this.index) &&
-      x < getMenusStartX(this.index) + MenusSettings.width &&
-      y > getMenusStartY() &&
-      y < getMenusStartY() + MenusSettings.height
+      e.offsetX > this.startX &&
+      e.offsetX < this.startX + MenusSettings.width &&
+      e.offsetY > this.startY &&
+      e.offsetY < this.startY + MenusSettings.height
     ) {
       this.isHeld = true
-      this.isActive = true
     }
   }
 
-  setDragged(x: number, y: number) {
-    this.startX = x
-    this.startY = y
+  setDragged(e: PointerEvent) {
+    if (this.isHeld) {
+      this.startX = e.offsetX - MenusSettings.width / 2
+      this.startY = e.offsetY - MenusSettings.height / 2
+    }
+  }
+
+  setDropped(e: PointerEvent) {
+    this.isHeld = false
+    e.preventDefault()
   }
 }
