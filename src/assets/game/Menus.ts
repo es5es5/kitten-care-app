@@ -66,6 +66,11 @@ export class Menus {
     this.isStatic = false
     if (this.isFalling) {
       this.startY += 1
+      if (this.startY >= FrameSettings.height) {
+        this.startX = getMenusStartX(this.index)
+        this.startY = getMenusStartY()
+        this.isFalling = false
+      }
     }
   }
 
