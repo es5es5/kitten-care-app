@@ -32,6 +32,7 @@ export class Menus {
   isActive = false
   isHeld = false
   isStatic = false
+  isFalling = false
 
   constructor(ctx: CanvasRenderingContext2D, index: number) {
     this.ctx = ctx
@@ -63,6 +64,9 @@ export class Menus {
       MenusSettings.height,
     )
     this.isStatic = false
+    if (this.isFalling) {
+      this.startY += 1
+    }
   }
 
   drawStatic() {
@@ -122,7 +126,10 @@ export class Menus {
   }
 
   setDropped(e: PointerEvent) {
-    this.isHeld = false
+    if (this.isHeld) {
+      this.isHeld = false
+      this.isFalling = true
+    }
     e.preventDefault()
   }
 }
