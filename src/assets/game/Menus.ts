@@ -170,9 +170,16 @@ export class Menus {
 
   setDropped(e: PointerEvent) {
     if (!this.isMovable) return
+
     if (this.isHeld) {
       this.isHeld = false
-      this.isFalling = true
+
+      if (this.index === 1) {
+        this.isFalling = true
+      } else {
+        this.startX = getMenusStartX(this.index)
+        this.startY = getMenusStartY()
+      }
     }
     e.preventDefault()
   }
