@@ -66,6 +66,8 @@ export const useGameStore = defineStore({
               this.setCursor('pointer')
               break
           }
+        } else {
+          this.setCursor('default')
         }
       })
 

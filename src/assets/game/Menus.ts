@@ -172,15 +172,14 @@ export class Menus {
     if (!this.isMovable) return
 
     if (this.isHeld) {
-      this.isHeld = false
-
       if (this.index === 1) {
         this.isFalling = true
+        this.isHeld = false
       } else {
         this.startX = getMenusStartX(this.index)
         this.startY = getMenusStartY()
+        this.isHeld = false
       }
     }
-    e.preventDefault()
   }
 }
