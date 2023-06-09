@@ -33,42 +33,10 @@ onMounted(() => {
   gameStore.setCanvas(document.getElementById('canvas1') as HTMLCanvasElement)
   const canvas = gameStore.getCanvas!
   const ctx = gameStore.getCtx!
+  gameStore.setCanvasEventListener()
 
   canvas.width = FrameSettings.width
   canvas.height = FrameSettings.height
-
-  canvas.addEventListener('pointermove', (e) => {
-    gameStore.getMenuList.forEach((menu) => {
-      menu.setActive(e)
-      menu.setDragged(e)
-    })
-
-    if (
-      gameStore.getMenuList.some(
-        (menu) => menu.showingState === MenuShowingState.Active,
-      )
-    ) {
-      gameStore.setCursor('grab')
-      if (gameStore.getMenuList.some((menu) => menu.isHeld)) {
-        gameStore.setCursor('grabbing')
-      }
-    } else {
-      gameStore.setCursor('default')
-    }
-  })
-
-  canvas.addEventListener('pointerdown', (e) => {
-    gameStore.getMenuList.forEach((menu) => {
-      menu.setDragging(e)
-    })
-    console.log('pointerdown', e)
-  })
-
-  canvas.addEventListener('pointerup', (e) => {
-    gameStore.getMenuList.forEach((menu) => {
-      menu.setDropped(e)
-    })
-  })
 
   const frame = new Frame(ctx)
 
@@ -79,7 +47,7 @@ onMounted(() => {
   }
 
   const catImage = new Image()
-  catImage.src = new URL('@/assets/cat/cat.png', import.meta.url).href
+  catImage.src = new URL('@/assets/cat/cat_left.png', import.meta.url).href
 
   const spriteWidth = CatSpriteSettings.spriteWidth
   const spriteHeight = CatSpriteSettings.spriteHeight

@@ -36,6 +36,7 @@ export class Menus {
   isHeld = false
   isStatic = false
   isFalling = false
+  isMovable = false
 
   constructor(ctx: CanvasRenderingContext2D, index: number) {
     this.ctx = ctx
@@ -47,6 +48,24 @@ export class Menus {
     this.startX = getMenusStartX(this.index)
     this.startY = getMenusStartY()
     this.showingState = MenuShowingState.Default
+
+    switch (index) {
+      case 1: // 먹이주기
+        this.isMovable = true
+        break
+      case 2: // 놀아주기
+        this.isMovable = true
+        break
+      case 3: // 만져주기
+        this.isMovable = false
+        break
+      case 4: // 샤워하기
+        this.isMovable = false
+        break
+      case 5: // 치료하기
+        this.isMovable = false
+        break
+    }
 
     return this
   }
@@ -129,6 +148,7 @@ export class Menus {
 
   setDragging(e: PointerEvent) {
     if (this.isStatic) return
+    if (!this.isMovable) return
 
     if (
       e.offsetX > this.startX &&
@@ -141,6 +161,7 @@ export class Menus {
   }
 
   setDragged(e: PointerEvent) {
+    if (!this.isMovable) return
     if (this.isHeld) {
       this.startX = e.offsetX - MenusSettings.width / 2
       this.startY = e.offsetY - MenusSettings.height / 2
@@ -148,6 +169,7 @@ export class Menus {
   }
 
   setDropped(e: PointerEvent) {
+    if (!this.isMovable) return
     if (this.isHeld) {
       this.isHeld = false
       this.isFalling = true
