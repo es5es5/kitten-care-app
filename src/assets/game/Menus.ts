@@ -21,9 +21,11 @@ function getMenusStartY() {
 }
 
 export enum MenuShowingState {
-  Disabled = 0,
+  Default = 0,
   Active = 1,
-  Default = 2,
+  PressDown = 2,
+  PressUp = 3,
+  Disabled = 4,
 }
 
 export class Menus {
@@ -71,18 +73,6 @@ export class Menus {
   }
 
   draw() {
-    let _showingState = 0
-    switch (this.showingState) {
-      case MenuShowingState.Disabled:
-        _showingState = MenusSettings.width * 0
-        break
-      case MenuShowingState.Active:
-        _showingState = MenusSettings.width * 1
-        break
-      case MenuShowingState.Default:
-        _showingState = MenusSettings.width * 0
-        break
-    }
     this.ctx.drawImage(
       this.image,
       /**
@@ -90,7 +80,7 @@ export class Menus {
        * Active = 1
        * Default = 2
        */
-      _showingState,
+      MenusSettings.width * this.showingState,
       MenusSettings.height * (this.index - 1),
       MenusSettings.width,
       MenusSettings.height,
@@ -100,24 +90,39 @@ export class Menus {
       MenusSettings.height,
     )
     this.isStatic = false
-    if (this.isFalling) {
-      this.startY += 1
-      if (this.startY >= FrameSettings.height) {
-        this.startX = getMenusStartX(this.index)
-        this.startY = getMenusStartY()
-        this.isFalling = false
-      }
+    this.update()
+  }
+
+  update() {
+    switch (this.index) {
+      case 1:
+        if (this.isFalling) {
+          this.startY += 1
+          if (this.startY >= FrameSettings.height - 68) {
+            this.startX = getMenusStartX(this.index)
+            this.startY = getMenusStartY()
+            this.isFalling = false
+          }
+        }
+        break
+      case 2:
+        break
+      case 3:
+        break
+      case 4:
+        break
+      case 5:
+        break
+
+      default:
+        break
     }
   }
 
   drawStatic() {
     this.ctx.drawImage(
       this.image,
-      /**
-       * 0 None Active
-       * 1 Active
-       */
-      0,
+      MenuShowingState.Default,
       MenusSettings.height * (this.index - 1),
       MenusSettings.width,
       MenusSettings.height,
@@ -157,6 +162,7 @@ export class Menus {
       e.offsetY < this.startY + MenusSettings.height
     ) {
       this.isHeld = true
+      this.isFalling = false
     }
   }
 

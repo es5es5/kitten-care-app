@@ -1,10 +1,13 @@
+import { Cat } from '@/assets/cat/Cat'
 import { MenuShowingState, Menus } from '@/assets/game/Menus'
 import { defineStore } from 'pinia'
 interface GameState {
   canvas: any
   ctx: any
+  gameFrame: BigInt
   menuList: Array<Menus>
   cursor: string
+  cat: Cat
 }
 
 export const useGameStore = defineStore({
@@ -12,12 +15,15 @@ export const useGameStore = defineStore({
   state: (): GameState => ({
     canvas: null,
     ctx: null,
+    gameFrame: 0n,
     menuList: new Array<Menus>(),
     cursor: 'default',
+    cat: {} as Cat,
   }),
   getters: {
     getCanvas: (state): HTMLCanvasElement => state.canvas,
     getCtx: (state): CanvasRenderingContext2D => state.ctx,
+    getGameFrame: (state): BigInt => state.gameFrame,
     getMenuList: (state) => state.menuList,
     getCursor: (state) => state.cursor,
     getActiveMenuIndex: (state) =>
@@ -26,11 +32,19 @@ export const useGameStore = defineStore({
       )?.index || 0,
     getHeldMenuIndex: (state) =>
       state.menuList.find((menu) => menu.isHeld === true)?.index || 0,
+    getCat: (state) => state.cat,
   },
   actions: {
-    setCanvas(canvas: HTMLCanvasElement) {
+    initGame(canvas: HTMLCanvasElement) {
       this.canvas = canvas
       this.ctx = canvas.getContext('2d')
+      this.gameFrame = 0
+    },
+    intervalGameFrame() {
+      this.gameFrame++
+    },
+    initCat(cat: Cat) {
+      this.cat = cat
     },
     addMenuList(menu: Menus) {
       this.menuList.push(menu)
