@@ -26,12 +26,12 @@ export const useGameStore = defineStore({
     getGameFrame: (state): number => state.gameFrame,
     getMenuList: (state) => state.menuList,
     getCursor: (state) => state.cursor,
-    getActiveMenuIndex: (state) =>
+    getActiveMenu: (state): Menus | null =>
       state.menuList.find(
         (menu) => menu.showingState === MenuShowingState.Active,
-      )?.index || 0,
-    getHeldMenuIndex: (state) =>
-      state.menuList.find((menu) => menu.isHeld === true)?.index || 0,
+      ) ?? null,
+    getHeldMenu: (state): Menus | null =>
+      state.menuList.find((menu) => menu.isHeld === true) ?? null,
     getCat: (state) => state.cat,
   },
   actions: {
@@ -60,15 +60,16 @@ export const useGameStore = defineStore({
           menu.setDragged(e)
         })
 
-        if (this.getActiveMenuIndex) {
-          switch (this.getActiveMenuIndex) {
+        if (this.getActiveMenu) {
+          switch (this.getActiveMenu.index) {
             case 1:
               this.setCursor('grab')
-              if (this.getHeldMenuIndex) this.setCursor('grabbing')
+              if (this.getHeldMenu?.index) this.setCursor('grabbing')
+              console.log(this.getHeldMenu)
               break
             case 2:
               this.setCursor('grab')
-              if (this.getHeldMenuIndex) this.setCursor('grabbing')
+              if (this.getHeldMenu?.index) this.setCursor('grabbing')
               break
             case 3:
               this.setCursor('pointer')
