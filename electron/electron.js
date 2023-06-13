@@ -6,6 +6,7 @@ const isDev = process.env.IS_DEV == 'true' ? true : false
 function createWindow() {
   // Create the browser window.
   const mainWindow = new BrowserWindow({
+    icon: path.join(__dirname, 'assets/512x512.png'),
     frame: false,
     width: 328,
     height: 360,

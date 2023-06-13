@@ -1,7 +1,7 @@
 {
   "name": "kitten-care-app",
   "private": true,
-  "version": "0.0.1",
+  "version": "0.0.2",
   "type": "commonjs",
   "main": "electron/electron.js",
   "author": "Louis Lee",
@@ -20,7 +20,11 @@
     "productName": "KittenCare",
     "copyright": "Copyright © 2019 ${author}",
     "mac": {
-      "category": "public.app-category.utilities"
+      "category": "public.app-category.utilities",
+      "icon": "electron/assets/512x512.png"
+    },
+    "win": {
+      "icon": "electron/assets/512x512.png"
     },
     "nsis": {
       "oneClick": false,
