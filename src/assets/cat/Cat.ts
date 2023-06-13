@@ -129,7 +129,7 @@ export class Cat {
     return this
   }
 
-  draw(gameFrame: BigInt) {
+  draw(gameFrame: number) {
     let framePosition =
       Math.floor(Number(gameFrame) / catSpriteAnimations[this.state].speed) %
       catSpriteAnimations[this.state].loc.length

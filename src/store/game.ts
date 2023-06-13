@@ -4,7 +4,7 @@ import { defineStore } from 'pinia'
 interface GameState {
   canvas: any
   ctx: any
-  gameFrame: BigInt
+  gameFrame: number
   menuList: Array<Menus>
   cursor: string
   cat: Cat
@@ -15,7 +15,7 @@ export const useGameStore = defineStore({
   state: (): GameState => ({
     canvas: null,
     ctx: null,
-    gameFrame: 0n,
+    gameFrame: 0,
     menuList: new Array<Menus>(),
     cursor: 'default',
     cat: {} as Cat,
@@ -23,7 +23,7 @@ export const useGameStore = defineStore({
   getters: {
     getCanvas: (state): HTMLCanvasElement => state.canvas,
     getCtx: (state): CanvasRenderingContext2D => state.ctx,
-    getGameFrame: (state): BigInt => state.gameFrame,
+    getGameFrame: (state): number => state.gameFrame,
     getMenuList: (state) => state.menuList,
     getCursor: (state) => state.cursor,
     getActiveMenuIndex: (state) =>
