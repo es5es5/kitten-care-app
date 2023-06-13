@@ -1,13 +1,10 @@
 <script lang="ts" setup>
 import { reactive } from 'vue'
-import { RouterView } from 'vue-router'
-
 const data = reactive({})
 </script>
 
 <template>
-  <TitleBar />
-  <RouterView />
+  <div></div>
 </template>
 
 <style lang="scss" scoped></style>
