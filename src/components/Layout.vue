@@ -15,7 +15,7 @@ const data = reactive({})
 
 <style lang="scss" scoped>
 .layout {
-  width: 320px;
-  height: 384px;
+  width: 328px;
+  height: 360px;
 }
 </style>

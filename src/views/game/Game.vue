@@ -77,14 +77,18 @@ onMounted(() => {
 </script>
 
 <template>
-  <div>
+  <div class="wrap">
     <canvas id="canvas1"></canvas>
   </div>
 </template>
 
 <style lang="scss" scoped>
+.wrap {
+  height: 100%;
+  width: 100%;
+}
 #canvas1 {
   max-width: 328px;
-  max-height: 360px;
+  max-height: 328px;
 }
 </style>

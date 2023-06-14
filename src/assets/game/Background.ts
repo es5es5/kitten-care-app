@@ -4,6 +4,7 @@ export const BackgroundSettings = {
   imageSrc: new URL('@/assets/map/background.png', import.meta.url).href,
   width: 320,
   height: 320,
+  bottomPadding: 28,
 }
 
 export class Background {

@@ -32,7 +32,6 @@ const closeApp = () => {
   background-color: #6c395c;
 
   height: 24px;
-  width: 100%;
   max-width: 328px;
   display: flex;
 

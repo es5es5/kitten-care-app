@@ -1,3 +1,4 @@
+import { BackgroundSettings } from '../game/Background'
 import { FrameSettings } from '../game/Frame'
 import { SpriteStateListItem, SpriteSettings } from '../models'
 
@@ -118,9 +119,8 @@ export class Cat {
     this.startX = FrameSettings.width / 2 - spriteWidth / 2
     this.startY =
       FrameSettings.height -
-      spriteHeight -
-      FrameSettings.titleBarHeight +
-      FrameSettings.padding * 2
+      CatSettings.height -
+      BackgroundSettings.bottomPadding
     this.state = 'idle'
     this.speed = 10
     this.direction = 1
