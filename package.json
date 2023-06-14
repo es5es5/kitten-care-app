@@ -10,7 +10,7 @@
     "dev": "vite",
     "serve": "vite --host 0.0.0.0 --port 5173",
     "build": "vue-tsc --noEmit && vite build",
-    "electron": "electron .",
+    "electron": "npm run build && electron .",
     "electron:builder": "electron-builder",
     "build:e:pre": "vue-tsc --noEmit && cross-env ELECTRON=true vite build",
     "build:e": "npm run build:e:pre && npm run electron:builder"

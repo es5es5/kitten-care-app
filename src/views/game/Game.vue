@@ -84,9 +84,7 @@ onMounted(() => {
 
 <style lang="scss" scoped>
 #canvas1 {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+  max-width: 328px;
+  max-height: 360px;
 }
 </style>

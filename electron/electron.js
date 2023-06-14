@@ -1,5 +1,5 @@
 const path = require('path')
-const { app, BrowserWindow } = require('electron')
+const { app, BrowserWindow, ipcMain } = require('electron')
 
 const isDev = process.env.IS_DEV == 'true' ? true : false
 
@@ -8,12 +8,13 @@ function createWindow() {
   const mainWindow = new BrowserWindow({
     icon: path.join(__dirname, 'assets/512x512.png'),
     frame: false,
-    width: 328,
-    height: 360,
+    width: 500,
+    height: 500,
     transparent: true,
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
       nodeIntegration: true,
+      contextIsolation: false,
     },
     resizable: false,
   })
@@ -29,6 +30,16 @@ function createWindow() {
   if (isDev) {
     mainWindow.webContents.openDevTools()
   }
+
+  ipcMain.on('minimizeApp', () => {
+    mainWindow.minimize()
+  })
+  ipcMain.on('maximizeApp', () => {
+    // mainWindow.maximize()
+  })
+  ipcMain.on('closeApp', () => {
+    mainWindow.close()
+  })
 }
 
 // This method will be called when Electron has finished
@@ -37,9 +48,13 @@ function createWindow() {
 app.whenReady().then(() => {
   createWindow()
   app.on('activate', function () {
+    console.log('app on activate')
     // On macOS it's common to re-create a window in the app when the
     // dock icon is clicked and there are no other windows open.
-    if (BrowserWindow.getAllWindows().length === 0) createWindow()
+    if (BrowserWindow.getAllWindows().length === 0) {
+      createWindow()
+    }
+    setTitleButtons()
   })
 })
 
@@ -47,17 +62,18 @@ app.whenReady().then(() => {
 // for applications and their menu bar to stay active until the user quits
 // explicitly with Cmd + Q.
 app.on('window-all-closed', () => {
+  console.log('app window-all-closed')
   if (process.platform !== 'darwin') {
     app.quit()
   }
 })
 
-app.whenReady().then(() => {
-  app.on('web-contents-created', (_, contents) => {
-    contents.on('new-window', (event, navigationUrl) => {
-      event.preventDefault()
-      const win = new BrowserWindow({ webContents: contents })
-      win.loadURL(navigationUrl)
-    })
-  })
-})
+// app.whenReady().then(() => {
+//   app.on('web-contents-created', (_, contents) => {
+//     contents.on('new-window', (event, navigationUrl) => {
+//       event.preventDefault()
+//       const win = new BrowserWindow({ webContents: contents })
+//       win.loadURL(navigationUrl)
+//     })
+//   })
+// })
