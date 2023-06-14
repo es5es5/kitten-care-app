@@ -20,9 +20,19 @@ const closeApp = () => {
 
 <template>
   <div class="container">
-    <button type="button" id="minimize" @click="minimizeApp">_</button>
-    <!-- <button type="button" id="maximize" @click="maximizeApp">ㅁ</button> -->
-    <button type="button" id="close" @click="closeApp">X</button>
+    <img src="@/assets/map/icon.png" alt="icon" class="windowButton icon" />
+    <img
+      src="@/assets/map/minimize.svg"
+      alt="minimize"
+      class="windowButton minimize"
+      @click="minimizeApp"
+    />
+    <img
+      src="@/assets/map/close.svg"
+      alt="close"
+      class="windowButton close"
+      @click="closeApp"
+    />
   </div>
 </template>
 
@@ -34,14 +44,31 @@ const closeApp = () => {
   height: 24px;
   max-width: 328px;
   display: flex;
+  // justify-content: space-between;
+  // align-items: center;
 
-  padding: 4px;
+  padding: 4px 5px 4px 4px;
   line-height: 1;
 
   border-radius: 4px 4px 0 0;
 
   * {
     -webkit-app-region: no-drag;
+  }
+
+  .windowButton {
+    padding: 2px;
+    // flex-direction: row;
+    &.icon {
+      margin-right: auto;
+    }
+    &.minimize {
+      margin-right: 5px;
+    }
+    &.close {
+      // padding: 2px 4px;
+      // border: 1px solid white;
+    }
   }
 }
 </style>
