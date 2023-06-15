@@ -37,6 +37,11 @@ function createWindow() {
   ipcMain.on('maximizeApp', () => {
     // mainWindow.maximize()
   })
+  ipcMain.on('setAlwaysOnTop', (event, value) => {
+    console.log('setAlwaysOnTop', event, value)
+    mainWindow.setAlwaysOnTop(!mainWindow.isAlwaysOnTop())
+    event.reply('setAlwaysOnTopResponse', mainWindow.isAlwaysOnTop())
+  })
   ipcMain.on('closeApp', () => {
     mainWindow.close()
   })
