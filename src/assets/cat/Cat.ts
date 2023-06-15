@@ -182,4 +182,8 @@ export class Cat {
     this.startX = x
     this.startY = y
   }
+
+  setMoving(direction: -1 | 1) {
+    this.startX = this.startX + direction
+  }
 }
