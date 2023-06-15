@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { reactive, onMounted } from 'vue'
+import { reactive, onMounted, onUnmounted } from 'vue'
 
 const data = reactive({
   isOpenSettings: false,
@@ -7,7 +7,15 @@ const data = reactive({
 })
 const electron = require('electron')
 
-onMounted(() => {})
+onMounted(() => {
+  window.addEventListener('blur', () => {
+    data.isOpenSettings = false
+  })
+})
+
+onUnmounted(() => {
+  window.removeEventListener('blur', () => {})
+})
 
 const openSettings = () => {
   data.isOpenSettings = !data.isOpenSettings
@@ -29,16 +37,27 @@ const closeApp = () => {
   electron.ipcRenderer.send('closeApp')
 }
 
+const vClickOutsideHandler = (event: PointerEvent): void => {
+  const element = event.target as HTMLElement
+  if (element.id === 'canvas1') {
+    data.isOpenSettings = false
+  }
+}
+
 electron.ipcRenderer.on(
   'setAlwaysOnTopResponse',
   (event: Event, isAlwaysOnTop: boolean) => {
     data.isAlwaysOnTop = isAlwaysOnTop
   },
 )
+
+electron.ipcRenderer.on('blur', (event: Event, isAlwaysOnTop: boolean) => {
+  console.log('blur')
+})
 </script>
 
 <template>
-  <div class="container">
+  <div class="container" v-click-outside="vClickOutsideHandler">
     <div class="titlebar">
       <img
         src="@/assets/map/icon.png"

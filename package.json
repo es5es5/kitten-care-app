@@ -1,7 +1,7 @@
 {
   "name": "kitten-care-app",
   "private": true,
-  "version": "0.0.2",
+  "version": "0.0.3",
   "type": "commonjs",
   "main": "electron/electron.js",
   "author": "Louis Lee",
@@ -40,6 +40,7 @@
     }
   },
   "dependencies": {
+    "click-outside-vue3": "^4.0.1",
     "pinia": "^2.0.32",
     "velocity-animate": "^1.5.2",
     "vue": "^3.2.47",

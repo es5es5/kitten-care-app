@@ -65,7 +65,6 @@ export const useGameStore = defineStore({
             case 1:
               this.setCursor('grab')
               if (this.getHeldMenu?.index) this.setCursor('grabbing')
-              console.log(this.getHeldMenu)
               break
             case 2:
               this.setCursor('grab')
