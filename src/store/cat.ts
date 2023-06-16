@@ -29,7 +29,7 @@ export const useCatStore = defineStore({
     height: 128,
     speed: 10,
     direction: 1,
-    state: 'idle',
+    state: 'sleep',
   }),
   getters: {
     getCatState: (
