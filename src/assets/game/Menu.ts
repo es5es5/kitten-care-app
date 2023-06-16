@@ -28,7 +28,7 @@ export enum MenuShowingState {
   Disabled = 4,
 }
 
-export class Menus {
+export class Menu {
   ctx: CanvasRenderingContext2D
   image: HTMLImageElement
   index: number // 메뉴 순서
@@ -187,5 +187,29 @@ export class Menus {
         this.isHeld = false
       }
     }
+  }
+}
+
+export class HeldMenu extends Menu {
+  heldX: number
+  heldY: number
+
+  constructor(
+    ctx: CanvasRenderingContext2D,
+    index: number,
+    heldX: number,
+    heldY: number,
+  ) {
+    super(ctx, index)
+    this.heldX = heldX
+    this.heldY = heldY
+  }
+
+  getHeldMenuPosition() {
+    return { heldX: this.heldX, heldY: this.heldY }
+  }
+  setHeldMenuPosition(x: number, y: number) {
+    this.heldX = x
+    this.heldY = y
   }
 }

@@ -1,13 +1,14 @@
-import { Cat } from '@/assets/cat/Cat'
-import { MenuShowingState, Menus } from '@/assets/game/Menus'
+import { Cat, CatState } from '@/assets/cat/Cat'
+import { Menu, MenuShowingState, HeldMenu } from '@/assets/game/Menu'
 import { defineStore } from 'pinia'
 interface GameState {
   canvas: any
   ctx: any
   gameFrame: number
-  menuList: Array<Menus>
+  menuList: Array<Menu>
   cursor: string
   cat: Cat
+  heldMenu: HeldMenu | null
 }
 
 export const useGameStore = defineStore({
@@ -16,9 +17,10 @@ export const useGameStore = defineStore({
     canvas: null,
     ctx: null,
     gameFrame: 0,
-    menuList: new Array<Menus>(),
+    menuList: new Array<Menu>(),
     cursor: 'default',
     cat: {} as Cat,
+    heldMenu: {} as HeldMenu,
   }),
   getters: {
     getCanvas: (state): HTMLCanvasElement => state.canvas,
@@ -26,12 +28,11 @@ export const useGameStore = defineStore({
     getGameFrame: (state): number => state.gameFrame,
     getMenuList: (state) => state.menuList,
     getCursor: (state) => state.cursor,
-    getActiveMenu: (state): Menus | null =>
+    getActiveMenu: (state): Menu | null =>
       state.menuList.find(
         (menu) => menu.showingState === MenuShowingState.Active,
       ) ?? null,
-    getHeldMenu: (state): Menus | null =>
-      state.menuList.find((menu) => menu.isHeld === true) ?? null,
+    getHeldMenu: (state): HeldMenu | null => state.heldMenu,
     getCat: (state) => state.cat,
   },
   actions: {
@@ -39,19 +40,24 @@ export const useGameStore = defineStore({
       this.canvas = canvas
       this.ctx = canvas.getContext('2d')
       this.gameFrame = 0
+      this.heldMenu = null
     },
     intervalGameFrame() {
       this.gameFrame++
     },
     initCat(cat: Cat) {
       this.cat = cat
+      this.cat.setState(CatState.SLEEP)
     },
-    addMenuList(menu: Menus) {
+    addMenuList(menu: Menu) {
       this.menuList.push(menu)
     },
     setCursor(cursor: string) {
       this.cursor = cursor
       this.canvas!.style.cursor = this.cursor
+    },
+    setHeldMenu(heldMenu: HeldMenu | null) {
+      this.heldMenu = heldMenu
     },
     setCanvasEventListener() {
       this.canvas.addEventListener('pointermove', (e: PointerEvent) => {
@@ -60,17 +66,33 @@ export const useGameStore = defineStore({
           menu.setDragged(e)
         })
 
+        this.heldMenu?.setHeldMenuPosition(e.offsetX, e.offsetY)
+
         if (this.getActiveMenu) {
           switch (this.getActiveMenu.index) {
             case 1:
               this.setCursor('grab')
-              if (this.getHeldMenu?.index) this.setCursor('grabbing')
-              this.cat.setState('walk')
-              this.cat.setMoving(e.offsetX - this.cat.startX > 0 ? 1 : -1)
+              if (this.getHeldMenu) {
+                this.setCursor('grabbing')
+                console.log(
+                  'this.cat.startX <= this.getHeldMenu.heldX',
+                  this.cat.startX,
+                  this.getHeldMenu.heldX,
+                )
+                if (this.cat.startX <= this.getHeldMenu.heldX) {
+                  this.cat.setDirection('Right')
+                } else {
+                  this.cat.setDirection('Left')
+                }
+                this.cat.setAgro(true)
+                this.cat.feeding()
+              }
               break
             case 2:
               this.setCursor('grab')
-              if (this.getHeldMenu?.index) this.setCursor('grabbing')
+              if (this.getHeldMenu) {
+                this.setCursor('grabbing')
+              }
               break
             case 3:
               this.setCursor('pointer')
@@ -91,6 +113,18 @@ export const useGameStore = defineStore({
         this.getMenuList.forEach((menu) => {
           menu.setDragging(e)
         })
+        this.setHeldMenu(
+          new HeldMenu(
+            this.getActiveMenu!.ctx,
+            this.getActiveMenu!.index,
+            e.offsetX,
+            e.offsetY,
+          ),
+        )
+
+        if (this.cat.isAgro) {
+          this.cat.setAgro(false)
+        }
       })
 
       this.canvas.addEventListener('pointerup', (e: PointerEvent) => {

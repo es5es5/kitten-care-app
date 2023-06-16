@@ -1,15 +1,10 @@
 <script lang="ts" setup>
-import {
-  animationStates as CatAnimationStates,
-  catSpriteAnimations,
-  spriteSettings as CatSpriteSettings,
-} from '@/assets/cat/states'
-import { onMounted, reactive } from 'vue'
-import { Background } from '@/assets/game/Background'
-import { Menus, MenuShowingState } from '@/assets/game/Menus'
-import { Frame, FrameSettings } from '@/assets/game/Frame'
-import { useGameStore } from '@/store/game'
 import { Cat } from '@/assets/cat/Cat'
+import { Background } from '@/assets/game/Background'
+import { Frame, FrameSettings } from '@/assets/game/Frame'
+import { Menu } from '@/assets/game/Menu'
+import { useGameStore } from '@/store/game'
+import { onMounted, reactive } from 'vue'
 
 const gameStore = useGameStore()
 
@@ -44,7 +39,7 @@ onMounted(() => {
   const background = new Background(ctx)
 
   for (let index = 1; index <= 5; index++) {
-    gameStore.addMenuList(new Menus(ctx, index))
+    gameStore.addMenuList(new Menu(ctx, index))
   }
 
   const cat = new Cat(ctx)
@@ -59,7 +54,7 @@ onMounted(() => {
     // Drawing Background
     background.draw()
 
-    // Drawing Menus
+    // Drawing Menu
     gameStore.getMenuList.forEach((menu) => {
       menu.drawStatic()
       menu.draw()

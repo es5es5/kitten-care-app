@@ -11,6 +11,25 @@ export const CatSettings = {
 
 export const catSpriteAnimations = {} as any
 
+export type CatDirection = 'Left' | 'Right'
+
+export enum CatState {
+  IDLE = 'idle',
+  IDLE_AGRO = 'idle_agro',
+  WALK = 'walk',
+  WALK_AGRO = 'walk_agro',
+  SLEEP = 'sleep',
+  SLEEP_AGRO = 'sleep_agro',
+  HAWL = 'hawl',
+  STANDING = 'standing',
+  STANDING_WALK = 'standing_walk',
+  EAT = 'eat',
+  WAIT1 = 'wait1',
+  WAIT2 = 'wait2',
+  WAIT3 = 'wait3',
+  DASH = 'dash',
+}
+
 export const animationStates = [
   {
     name: 'idle',
@@ -108,8 +127,10 @@ export class Cat {
   startX: number
   startY: number
   speed: number
-  state: string
-  direction: -1 | 1
+  state: CatState
+  isAgro: boolean
+  isMovable: boolean
+  direction: CatDirection
 
   constructor(ctx: CanvasRenderingContext2D) {
     this.ctx = ctx
@@ -121,9 +142,11 @@ export class Cat {
       FrameSettings.height -
       CatSettings.height -
       BackgroundSettings.bottomPadding
-    this.state = 'idle'
+    this.state = CatState.IDLE
     this.speed = 10
-    this.direction = 1
+    this.isAgro = false
+    this.isMovable = true
+    this.direction = 'Left'
 
     setCatAnimationStates()
     return this
@@ -154,16 +177,16 @@ export class Cat {
   setCat(value: {
     x: number
     y: number
-    state: string
+    state: CatState
     speed: number
-    direction: -1 | 1
+    direction: CatDirection
   }) {
     this.startX = value.x
     this.startY = value.y
     this.speed = value.speed
     this.state = value.state
     this.direction = value.direction
-    if (this.direction === 1) {
+    if (this.direction === 'Left') {
       this.image.src = CatSettings.imageSrcLeft
     } else {
       this.image.src = CatSettings.imageSrcRight
@@ -174,7 +197,7 @@ export class Cat {
     return this
   }
 
-  setState(state: string) {
+  setState(state: CatState) {
     this.state = state
   }
 
@@ -183,7 +206,107 @@ export class Cat {
     this.startY = y
   }
 
-  setMoving(direction: -1 | 1) {
-    this.startX = this.startX + direction
+  setMoving() {
+    if (!this.isMovable) return
+    let x = this.startX + this.getDirection()
+
+    // if (x <= 0) {
+    //   this.startX = 0
+    //   this.setDirectionToggle()
+    // } else if (x >= BackgroundSettings.width - CatSettings.width) {
+    //   this.startX = BackgroundSettings.width - CatSettings.width
+    //   this.setDirectionToggle()
+    // } else {
+    //   this.startX = x
+    // }
+    this.startX = x
+  }
+
+  setDirection(direction: CatDirection) {
+    this.direction = direction
+    if (this.direction === 'Left') {
+      this.image.src = CatSettings.imageSrcLeft
+    } else {
+      this.image.src = CatSettings.imageSrcRight
+    }
+  }
+
+  setDirectionToggle() {
+    switch (this.direction) {
+      case 'Left':
+        this.setDirection('Right')
+        break
+      case 'Right':
+        this.setDirection('Left')
+        break
+    }
+  }
+
+  getDirection(): -1 | 1 {
+    switch (this.direction) {
+      case 'Left':
+        return -1
+      case 'Right':
+        return 1
+    }
+  }
+
+  setAgro(isAgro: boolean) {
+    this.isAgro = isAgro
+  }
+
+  getAgro() {
+    return this.isAgro
+  }
+
+  checkAgro() {
+    if (!this.isAgro) return
+
+    switch (this.state) {
+      case CatState.SLEEP:
+        this.isMovable = false
+        setTimeout(() => {
+          this.setState(CatState.SLEEP_AGRO)
+        }, 500)
+        break
+      case CatState.SLEEP_AGRO:
+        this.isMovable = false
+        setTimeout(() => {
+          this.setState(CatState.WALK)
+        }, 500)
+        break
+      case CatState.WALK:
+        this.isMovable = true
+
+        setTimeout(() => {
+          this.setState(CatState.WALK_AGRO)
+        }, 200)
+        break
+      case CatState.WALK_AGRO:
+        this.isMovable = true
+        setTimeout(() => {
+          this.setState(CatState.STANDING)
+        }, 500)
+        break
+      case CatState.STANDING:
+        this.isMovable = true
+        // setTimeout(() => {
+        //   this.setState(CatState.STANDING_WALK)
+        // }, 500)
+        setTimeout(() => {
+          this.setState(CatState.WALK_AGRO)
+        }, 500)
+        break
+      case CatState.STANDING_WALK:
+        this.isMovable = true
+        break
+      default:
+        break
+    }
+  }
+
+  feeding() {
+    this.checkAgro()
+    this.setMoving()
   }
 }
